@@ -1,1 +1,22 @@
+name: Nightly Build
 
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 20 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate artifact
+        run: |
+          mkdir -p out
+          echo "nightly $(date -u)" > out/build.txt
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-build-output
+          path: out/
+          retention-days: 30
